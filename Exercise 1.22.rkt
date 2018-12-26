@@ -39,9 +39,6 @@
 
 
 (search-for-primes 1000 3)
-(newline)
 (search-for-primes 10000 3)
-(newline)
 (search-for-primes 100000 3)
-(newline)
 (search-for-primes 1000000 3)
