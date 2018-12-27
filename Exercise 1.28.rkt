@@ -1,45 +1,57 @@
 #lang sicp
 
-(define (square x) (* x x))
-(define (even? x) (= 0 (remainder x 2)))
+(define (cube x) (* x x x))
+(define (inc x) (+ x 1))
+(define (id x) x)
 
+(define (sum-integers-iter a b)
+  (define (iter c sum)
+    (if (<= c b)
+        (iter (+ c 1) (+ sum c))
+        sum))
+  (iter a 0))
 
-(define (miller-rabin-test n)
-  (define (expmod b e m)
-  (cond ((= e 0) 1)
-        ((even? e) (remainder (square (expmod b (/ e 2) m))
-                              m))
-        (else (remainder (* b (expmod b (- e 1) m))
-                         m))))
-  
-  (define (iter a)
-    (cond ((= a 0) #t)
-          ((= 1 (expmod a (- n 1) n)) (iter (- a 1)))
-          (else #f)))
-  (iter (- n 1)))
+(define (sum-integers a b)
+  (if (> a b)
+      0
+      (+ a (sum-integers (+ a 1) b))))
 
+(define (sum-cubes a b)
+  (if (> a b)
+      0
+      (+ (cube a) (sum-cubes (+ a 1) b))))
 
-(define (miller-rabin-test-2 n)
-  (define (expmod b e m)
-    (cond ((= e 0) 1)
-        ((even? e)
-         (if (nontrivial-square-root? (expmod b (/ e 2) m))
-             0
-             (remainder (square (expmod b (/ e 2) m)) m)))
-        (else (remainder (* b (expmod b (- e 1) m))
-                         m))))
-  
-  (define (nontrivial-square-root? x)
-  (and (not (= 1 x))
-       (not (= (- n 1) x))
-       (= 1 (remainder (square x) n))))
+(define (pi-sum a b)
+  (if (> a b)
+      0
+      (+ (/ 1.0 (* a (+ a 2))) (pi-sum (+ a 4) b))))
 
-  (define (iter a)
-    (cond ((= a 0) #t)
-          ((= 0 (expmod a n n)) #f)
-          (else (iter (- a 1)))))
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a) (sum term (next a) next b))))
 
-  (iter (- n 1)))
+(define (sum-cubes-2 a b)
+  (sum cube a inc b))
 
-(miller-rabin-test 1105)
-(miller-rabin-test-2 561)
+(define (sum-integers-2 a b)
+  (sum id a inc b))
+
+(define (pi-sum-2 a b)
+  (define (pi-term x)
+    (/ 1.0 (* x (+ x 2))))
+  (define (pi-next x)
+    (+ x 4))
+  (sum pi-term a pi-next b))
+
+(sum-cubes-2 1 10)
+(sum-integers-2 1 10)
+(* 8 (pi-sum-2 1 1000))
+
+(define (integral f a b dx)
+  (define (add-dx x)
+    (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b)
+     dx))
+
+(integral cube 0 1 0.001)
