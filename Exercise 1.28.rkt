@@ -39,7 +39,9 @@
           ((= 0 (expmod a n n)) #f)
           (else (iter (- a 1)))))
 
-  (iter (- n 1)))
+  (if (< n 2)
+      #f
+      (iter (- n 1))))
 
 (miller-rabin-test 1105)
 (miller-rabin-test-2 561)
