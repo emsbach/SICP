@@ -17,5 +17,6 @@
 (define (except-first-denomination l) (cdr l))
 (define (no-more? l) (null? l))
 
+(cc 100 euro-coins)
 (cc 100 (reverse euro-coins))
   
