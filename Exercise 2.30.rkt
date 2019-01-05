@@ -37,6 +37,9 @@
         (else (cons (square-tree-2 (car tree))
                     (square-tree-2 (cdr tree))))))
 
+(define (square-tree-3 tree)
+  (map-tree square tree))
+
 ; Testing
 (define t (list 1 (list 2 (list 3 4) 5) (list 6 7)))
 (display (square-tree-2 t))
